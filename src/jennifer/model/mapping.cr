@@ -445,7 +445,11 @@ module Jennifer
                     {% if value[:parsed_type].includes?("Int64") %}
                       %var{key.id}.is_a?(Int32) ? %var{key.id}.to_i64 : %var{key.id}
                     {% else %}
-                      %var{key.id}
+                      {% if value[:parsed_type].includes?("JSON::Any") %}
+                        JSON.parse(%var{key.id}.to_json)
+                      {% else %}
+                        %var{key.id}
+                      {% end %}
                     {% end %}
                   end
                 {% end %}
